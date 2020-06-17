@@ -1,5 +1,6 @@
 
 import logging
+import sys
 
 from os import getenv
 from os.path import join, dirname, realpath
@@ -13,7 +14,12 @@ from prodctrlcore.utils import CountingIter
 
 logger = logging.getLogger(__name__)
 
-BASE_DIR = dirname(realpath(__file__))
+FROZEN = hasattr(sys, 'frozen')  # frozen
+if FROZEN:
+    BASE_DIR = dirname(sys.executable)
+else:  # unfrozen
+    BASE_DIR = dirname(realpath(__file__))
+
 DATA_FILE = join(BASE_DIR, "data", "Job Ship Dates.xlsx")
 
 TOKEN = getenv('MONDAY_TOKEN')
@@ -73,16 +79,18 @@ def get_update_data():
         jobs[without_struct] = jobs[key]
         del jobs[key]
 
+    return jobs
+
 
 def process_updates(jobs, board_name='Jobs'):
     client = MondayClient('pimiller@high.net', TOKEN, TOKEN)
     board = client.get_board(name=board_name)
 
+    count = 0
     for group in board.get_groups():
         if group.title in SKIP_GROUPS:
             continue
 
-        count = 0
         for item in group.get_items():
             if item.name in jobs:
                 print('\r[{}] Updating: {}'.format(count, item.name), end='')
