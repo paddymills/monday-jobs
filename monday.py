@@ -20,7 +20,7 @@ if FROZEN:
 else:  # unfrozen
     BASE_DIR = dirname(realpath(__file__))
 
-DATA_FILE = join(BASE_DIR, "data", "Job Ship Dates.xlsx")
+DATA_FILE = join(BASE_DIR, "__job_ship_dates.xlsx")
 
 TOKEN = getenv('MONDAY_TOKEN')
 SKIP_GROUPS = ['Jobs Completed Through PC']
