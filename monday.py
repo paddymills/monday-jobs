@@ -20,9 +20,10 @@ if FROZEN:
 else:  # unfrozen
     BASE_DIR = dirname(realpath(__file__))
 
+# defaults
+TOKEN = getenv('MONDAY_TOKEN')
 DATA_FILE = join(BASE_DIR, "__job_ship_dates.xlsx")
 
-TOKEN = getenv('MONDAY_TOKEN')
 SKIP_GROUPS = ['Jobs Completed Through PC']
 JOB_REGEX = regex("([A-Z])-([0-9]{7})[A-Z]?-([0-9]{1,2})")
 
@@ -116,6 +117,14 @@ def process_updates(jobs, board_name='Jobs'):
                 count += 1
             else:
                 logger.info("Not in active jobs: {}".format(item.name))
+
+
+def set_token(token_value):
+    TOKEN = token_value
+
+
+def set_xl_file(xl_file):
+    DATA_FILE = join(BASE_DIR, xl_file)
 
 
 if __name__ == "__main__":
