@@ -2,7 +2,7 @@
 from PyInstaller.__main__ import run as pyinstall
 from configparser import ConfigParser
 
-from os import getenv, mkdir()
+from os import getenv, mkdir
 from shutil import copyfile
 
 
