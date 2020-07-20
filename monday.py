@@ -76,8 +76,10 @@ def get_update_data():
 
     keys = list(jobs.keys())
     for key in keys:
-        without_struct = '-'.join(JOB_REGEX.match(key).groups())
-        jobs[without_struct] = jobs[key]
+        match = JOB_REGEX.match(key)
+        if match:
+            jobs['-'.join(match.groups())] = jobs[key]
+
         del jobs[key]
 
     return jobs
@@ -117,6 +119,7 @@ def process_updates(jobs, board_name='Jobs'):
                 count += 1
             else:
                 logger.info("Not in active jobs: {}".format(item.name))
+    print('\n')
 
 
 def set_token(token_value):
