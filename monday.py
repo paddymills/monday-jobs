@@ -26,7 +26,7 @@ DATA_FILE = join(BASE_DIR, "__job_ship_dates.xlsx")
 
 SKIP_GROUPS = ['Jobs Completed Through PC']
 JOB_REGEX = regex("([A-Z])-([0-9]{7})[A-Z]?-([0-9]{1,2})")
-E_JOB_REGEX = regex("([A-Z])-([0-9]{2})-([0-9]{4})[A-Z]?-([0-9]{1,2})")
+E_JOB_REGEX = regex("[A-Z]-([0-9]{2})-([0-9]{4})[A-Z]?-([0-9]{1,2})")
 
 # column mapping to monday
 # column: (id, type)
@@ -83,7 +83,7 @@ def get_update_data():
             new_key = '-'.join(match.groups())
 
         elif (match := E_JOB_REGEX.match(key)) is not None:
-            new_key = "D-{}0{}-{}".format(*match.groups())
+            new_key = "D-1{}{}-{}".format(*match.groups())
 
         else:
             continue
@@ -123,7 +123,7 @@ def process_updates(jobs, board_name='Jobs'):
 
                 item.change_multiple_column_values(column_values=update_vals)
                 logger.info("Updating {}: {}".format(
-                    item.name, str(update_vals)))
+                    item.name, str(log_vals(update_vals))))
                 count += 1
             else:
                 logger.info("Not in active jobs: {}".format(item.name))
@@ -131,14 +131,21 @@ def process_updates(jobs, board_name='Jobs'):
 
 
 def log_vals(vals):
+    result = "[ "
     for val in vals:
         _type = type(val)
         if _type is columnvalue.DateValue:
-            yield val.date
+            result += val.date
         elif _type is columnvalue.DateValue:
-            yield val.text
+            result += val.text
         else:
-            yield str(val)
+            result += str(val)
+
+        result += ", "
+
+    result += " ]"
+
+    return result
 
 
 def set_token(token_value):
