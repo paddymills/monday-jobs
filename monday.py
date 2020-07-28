@@ -26,6 +26,7 @@ DATA_FILE = join(BASE_DIR, "__job_ship_dates.xlsx")
 
 SKIP_GROUPS = ['Jobs Completed Through PC']
 JOB_REGEX = regex("([A-Z])-([0-9]{7})[A-Z]?-([0-9]{1,2})")
+E_JOB_REGEX = regex("([A-Z])-([0-9]{2})-([0-9]{4})[A-Z]?-([0-9]{1,2})")
 
 # column mapping to monday
 # column: (id, type)
@@ -76,11 +77,18 @@ def get_update_data():
 
     keys = list(jobs.keys())
     for key in keys:
-        match = JOB_REGEX.match(key)
-        if match:
-            jobs['-'.join(match.groups())] = jobs[key]
+        val = jobs.pop(key)
 
-        del jobs[key]
+        if (match := JOB_REGEX.match(key)) is not None:
+            new_key = '-'.join(match.groups())
+
+        elif (match := E_JOB_REGEX.match(key)) is not None:
+            new_key = "{}-{}0{}-{}".format(*match.groups())
+
+        else:
+            continue
+
+        jobs[new_key] = val
 
     return jobs
 
