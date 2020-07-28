@@ -7,7 +7,7 @@ from os.path import join, dirname, realpath
 from re import compile as regex
 from argparse import ArgumentParser
 from datetime import datetime
-from moncli import MondayClient, create_column_value, ColumnType
+from moncli import MondayClient, create_column_value, ColumnType, columnvalue
 
 from prodctrlcore.hssformats import schedule
 from prodctrlcore.utils import CountingIter
@@ -83,7 +83,7 @@ def get_update_data():
             new_key = '-'.join(match.groups())
 
         elif (match := E_JOB_REGEX.match(key)) is not None:
-            new_key = "{}-{}0{}-{}".format(*match.groups())
+            new_key = "D-{}0{}-{}".format(*match.groups())
 
         else:
             continue
@@ -128,6 +128,17 @@ def process_updates(jobs, board_name='Jobs'):
             else:
                 logger.info("Not in active jobs: {}".format(item.name))
     print('\n')
+
+
+def log_vals(vals):
+    for val in vals:
+        _type = type(val)
+        if _type is columnvalue.DateValue:
+            yield val.date
+        elif _type is columnvalue.DateValue:
+            yield val.text
+        else:
+            yield str(val)
 
 
 def set_token(token_value):
