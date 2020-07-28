@@ -3,7 +3,7 @@
 block_cipher = None
 
 
-a = Analysis(['entrypoint.py'],
+a = Analysis(['monday.py'],
              pathex=['C:\\Users\\PMiller1\\git\\monday-jobs'],
              binaries=[],
              datas=[],
@@ -30,4 +30,4 @@ exe = EXE(pyz,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=False , icon='icon.ico')
+          console=True , icon='icon.ico')
