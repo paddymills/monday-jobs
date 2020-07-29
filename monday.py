@@ -123,7 +123,7 @@ def process_updates(jobs, board_name='Jobs'):
 
                 item.change_multiple_column_values(column_values=update_vals)
                 logger.info("Updating {}: {}".format(
-                    item.name, str(log_vals(update_vals))))
+                    item.name, log_vals(update_vals)))
                 count += 1
             else:
                 logger.info("Not in active jobs: {}".format(item.name))
@@ -131,21 +131,18 @@ def process_updates(jobs, board_name='Jobs'):
 
 
 def log_vals(vals):
-    result = "[ "
+    result = list()
+
     for val in vals:
         _type = type(val)
         if _type is columnvalue.DateValue:
-            result += val.date
-        elif _type is columnvalue.DateValue:
-            result += val.text
+            result.append(val.date)
+        elif _type is columnvalue.TextValue:
+            result.append(val.text)
         else:
-            result += str(val)
+            result.append(str(val))
 
-        result += ", "
-
-    result += " ]"
-
-    return result
+    return str(result)
 
 
 def set_token(token_value):
