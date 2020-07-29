@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='monday-jobs',
-    version=1.0,
+    version=1.1,
     description="Monday.com Jobs board automation script",
     install_requires=[
         "moncli>=0.1.6",
