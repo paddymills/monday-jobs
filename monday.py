@@ -79,11 +79,11 @@ def get_update_data():
     for key in keys:
         val = jobs.pop(key)
 
-        if (match := JOB_REGEX.match(key)) is not None:
-            new_key = '-'.join(match.groups())
+        if JOB_REGEX.match(key):
+            new_key = '-'.join(JOB_REGEX.match(key).groups())
 
-        elif (match := E_JOB_REGEX.match(key)) is not None:
-            new_key = "D-1{}{}-{}".format(*match.groups())
+        elif E_JOB_REGEX.match(key):
+            new_key = "D-1{}{}-{}".format(*E_JOB_REGEX.match(key).groups())
 
         else:
             continue
