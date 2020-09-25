@@ -1,3 +1,7 @@
+#######################################
+#               Python                #
+#######################################
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -14,3 +18,14 @@ venv.bak/
 config.ini
 
 logs/*
+
+#######################################
+#                Rust                 #
+#######################################
+
+# Generated files
+/target/*
+
+# The library shouldn't decide about the exact versions of 
+# its dependencies, but let the downstream crate decide.
+Cargo.lock
