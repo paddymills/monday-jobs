@@ -2,7 +2,7 @@ use calamine::{open_workbook, DataType, Error, RangeDeserializerBuilder, Reader,
 // use chrono::DateTime;
 
 fn example() -> Result<(), Error> {
-    let path = format!("{}/data/__job_ship_dates.xlsx", env!("CARGO_MANIFEST_DIR"));
+    let path = format!("{}/data/test.xlsx", env!("CARGO_MANIFEST_DIR"));
     let mut workbook: Xlsx<_> = open_workbook(path)?;
     let range = workbook
         .worksheet_range("Dates")
