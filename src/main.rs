@@ -1,4 +1,5 @@
-use calamine::{open_workbook, DataType, Error, RangeDeserializerBuilder, Reader, Xlsx};
+use calamine::{open_workbook, DataType, Xlsx};
+use calamine::{Error, RangeDeserializerBuilder, Reader};
 // use chrono::DateTime;
 
 fn example() -> Result<(), Error> {
@@ -7,16 +8,21 @@ fn example() -> Result<(), Error> {
     let range = workbook
         .worksheet_range("Dates")
         .ok_or(Error::Msg("Cannot find sheet 'Dates'"))??;
-    println!("{:?}", range);
 
-    let mut iter = RangeDeserializerBuilder::new().from_range(&range)?;
+    let iter = RangeDeserializerBuilder::new().from_range(&range)?;
 
-    if let Some(result) = iter.next() {
-        let (key, early, main): (String, DataType, DataType) = result?;
-        println!("{} | {} | {}", key, early, main);
-        Ok(())
-    } else {
-        Err(From::from("expected at least one record but got none"))
+    for elem in iter {
+        let (key, early, main): (String, DataType, DataType) = elem?;
+        println!("{:<13} | {:<10} | {}", key, date(early), date(main));
+    }
+
+    Ok(())
+}
+
+fn date(date: DataType) -> String {
+    match date.as_date() {
+        Some(x) => format!("{:}", x),
+        None => String::from(""),
     }
 }
 
