@@ -8,6 +8,8 @@ edition = "2018"
 
 [dependencies]
 chrono = "0.4.16"
+regex = "1.3.9"
+lazy_static = "1.4.0"
 
 [dependencies.calamine]
 version = "0.16.1"
