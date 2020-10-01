@@ -48,10 +48,10 @@ class App extends React.Component {
   }
 
   async fileHandler(fileText) {
-    // TODO: parse header
     // TODO: filter out items not in this.state.jobs
 
-    fileText.split("\r\n")
+    fileText
+      .split("\r\n")
       .map(line => line.split(","))
       .filter(x => x[0])
       .forEach(line => {
@@ -60,13 +60,12 @@ class App extends React.Component {
           {
             [this.state.earlyStartColumn]: line[1],
             [this.state.mainStartColumn]: line[2],
-            [this.state.pmColumn]: null,
-            [this.state.baysColumn]: null,
-            [this.state.productsColumn]: null,
+            [this.state.pmColumn]: line[3],
+            [this.state.baysColumn]: line[4],
+            [this.state.productsColumn]: line[5],
           }
         ]);
       });
-
   }
 
   updateJob(job, vals) {
