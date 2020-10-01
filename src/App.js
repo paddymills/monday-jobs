@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import mondaySdk from "monday-sdk-js";
+import { fileParser } from "./fileParser";
 const monday = mondaySdk();
 
 // for getting column name when in settings as { columnName: true }
@@ -47,27 +48,6 @@ class App extends React.Component {
     });
   }
 
-  async fileHandler(fileText) {
-    // TODO: filter out items not in this.state.jobs
-
-    fileText
-      .split("\r\n")
-      .map(line => line.split(","))
-      .filter(x => x[0])
-      .forEach(line => {
-        console.log([
-          line[0],
-          {
-            [this.state.earlyStartColumn]: line[1],
-            [this.state.mainStartColumn]: line[2],
-            [this.state.pmColumn]: line[3],
-            [this.state.baysColumn]: line[4],
-            [this.state.productsColumn]: line[5],
-          }
-        ]);
-      });
-  }
-
   updateJob(job, vals) {
     // get job id
     // update with vals
@@ -111,7 +91,7 @@ class App extends React.Component {
     // TODO: get item ids and store in state
 
     for (const file of files) {
-      file.text().then(res => this.fileHandler(res));
+      let res = fileParser(file);
     }
 
     this.setState({ dropping: false, dropped: true });
