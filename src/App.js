@@ -48,6 +48,9 @@ class App extends React.Component {
   }
 
   async fileHandler(fileText) {
+    // TODO: parse header
+    // TODO: filter out items not in this.state.jobs
+
     fileText.split("\r\n")
       .map(line => line.split(","))
       .filter(x => x[0])
@@ -106,6 +109,8 @@ class App extends React.Component {
     event.preventDefault();
 
     let files = event.dataTransfer.files;
+    // TODO: get item ids and store in state
+
     for (const file of files) {
       file.text().then(res => this.fileHandler(res));
     }
