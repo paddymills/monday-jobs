@@ -18,8 +18,21 @@ class App extends React.Component {
     // TODO: set up event listeners
   }
 
+  dropHandler(event) {
+    event.preventDefault();
+    console.log(event);
+  }
+
+  dragOverHandler(event) {
+    console.log(event);
+  }
+
   render() {
-    return <div className="App">Hello, monday Apps!</div>;
+    return <div className="App">
+      <div id="drop_zone" onDrop="{this.dropHandler}" onDragOver="{this.dragOverHander}">
+        <p>Drop file(s) here...</p>
+      </div>
+    </div>;
   }
 }
 

@@ -1,6 +1,7 @@
 body {
   margin: 0;
   font-family: "Roboto", sans-serif;
+  color: #323338;
 }
 
 .App {
@@ -9,4 +10,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+#drop_zone {
+  border: dashed #C5C7D0 5px;
+  border-radius: 16px;
+  padding: 10em;
 }
