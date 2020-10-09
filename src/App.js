@@ -91,7 +91,7 @@ class App extends React.Component {
     // TODO: get item ids and store in state
 
     for (const file of files) {
-      let res = fileParser(file);
+      let res = fileParser(file, this.state);
     }
 
     this.setState({ dropping: false, dropped: true });
