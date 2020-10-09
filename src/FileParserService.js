@@ -33,14 +33,10 @@ export default class FileParser {
       }
 
       if (jobs[job].hasOwnProperty(prop) && !overwrite) {
-
-        jobs[job][prop] += "," + val;
-
-      } else {
-
-        jobs[job][prop] = val;
-
+        val = jobs[job][prop] + "," + val;
       }
+
+      jobs[job][prop] = val;
     };
 
     var result = [];
@@ -57,8 +53,8 @@ export default class FileParser {
         result.push(job);
         switch (col) {
           case "Dates":
-            jobs.updateJob(job, this.cfg.earlyStartColumn, line[2]);
-            jobs.updateJob(job, this.cfg.mainStartColumn, line[3]);
+            jobs.updateJob(job, this.cfg.earlyStartColumn, formatDate(line[2]));
+            jobs.updateJob(job, this.cfg.mainStartColumn, formatDate(line[3]));
             break;
           case "PM":
             jobs.updateJob(job, this.cfg.pmColumn, line[2], true);
@@ -104,4 +100,12 @@ function parseJob(job) {
   }
 
   return job;
+}
+
+function formatDate(date) {
+  if (date === "") {
+    return null;
+  }
+
+  return new Date(date).toISOString().substring(0, 10);
 }
