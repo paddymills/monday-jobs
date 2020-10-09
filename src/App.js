@@ -1,7 +1,7 @@
 import React from "react";
 import "./App.css";
 import mondaySdk from "monday-sdk-js";
-import { fileParser } from "./fileParser";
+import FileParser from "./FileParserService";
 const monday = mondaySdk();
 
 // for getting column name when in settings as { columnName: true }
@@ -20,6 +20,8 @@ class App extends React.Component {
       dropping: false,
       dropped: false,
     };
+
+    this.fileParser = new FileParser();
   }
 
   componentDidMount() {
@@ -36,6 +38,8 @@ class App extends React.Component {
             baysColumn: getKey(res.data.baysColumn),
             productsColumn: getKey(res.data.productsColumn),
           });
+
+          this.fileParser.init(this.state);
 
           break;
         case 'context':
@@ -91,7 +95,7 @@ class App extends React.Component {
     // TODO: get item ids and store in state
 
     for (const file of files) {
-      let res = fileParser(file, this.state);
+      let res = this.fileParser.parseFile(file);
     }
 
     this.setState({ dropping: false, dropped: true });
