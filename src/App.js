@@ -1,7 +1,8 @@
 import React from "react";
 import "./App.css";
 import mondaySdk from "monday-sdk-js";
-import FileParser from "./FileParserService";
+import FileParser from "./services/FileParserService";
+import mondayService from "./services/MondayService.js";
 const monday = mondaySdk();
 
 // for getting column name when in settings as { columnName: true }
@@ -39,53 +40,21 @@ class App extends React.Component {
             productsColumn: getKey(res.data.productsColumn),
           });
 
-          this.fileParser.init(this.state);
+          this.fileParser.initConfig(this.state);
 
           break;
         case 'context':
           this.setState({ boardId: res.data.boardIds[0] });
+
+          mondayService
+            .getJobs(this.state.boardId)
+            .then(res => this.fileParser.initJobs(res));
 
           break;
         default:
           break;
       }
     });
-  }
-
-  updateJob(job, vals) {
-    // get job id
-    // update with vals
-    // may need to process one at a time
-
-    try {
-      const query = `mutation (
-        $boardId: Int!,
-        $itemId: Int!,
-        $columnValues: JSON!
-      ) {
-        change_multiple_column_values (
-          board_id: $boardId,
-          item_id: $itemId,
-          column_values: $columnValues
-        ) {
-          id
-        }
-      }`;
-      const variables = {
-        boardId: this.state.boardId,
-        itemId: null,
-        columnValues: JSON.stringify(vals)
-      };
-
-      monday.api(query, { variables });
-    } catch (err) {
-      console.log(err);
-
-      monday.execute("notice", {
-        message: "Error executing GraphQL. Check console.",
-        type: "error",
-      });
-    }
   }
 
   dropHandler(event) {

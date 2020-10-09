@@ -12,8 +12,12 @@ const COST_CENTERS = {
 
 export default class FileParser {
 
-  init(state) {
+  initConfig(state) {
     this.cfg = state;
+  }
+
+  initJobs(jobs) {
+    this.jobs = jobs;
   }
 
   parseFile(file) {
@@ -68,7 +72,7 @@ export default class FileParser {
             }
             break;
           default:
-            console.log("Type not matched: ", line.toString());
+            console.log("Type not matched: ", line);
             break;
         }
       });
