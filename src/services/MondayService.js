@@ -4,10 +4,12 @@ const monday = mondaySdk();
 const ARCHIVE_GROUP = "Jobs Completed Through PC";
 
 export default class MondayService {
-  static async updateJob(job, vals) {
+  static async updateJob(boardId, vals) {
     // get job id
     // update with vals
     // may need to process one at a time
+
+    const { id, ...columnVals } = vals;
 
     try {
       const query = `mutation (
@@ -24,16 +26,18 @@ export default class MondayService {
         }
       }`;
       const variables = {
-        boardId: this.state.boardId,
-        itemId: null,
-        columnValues: JSON.stringify(vals)
+        boardId: boardId,
+        itemId: id,
+        columnValues: JSON.stringify(columnVals)
       };
+      return monday.api(query, { variables });
 
-      monday.api(query, { variables });
     } catch (err) {
       console.log(err);
 
       this.error("Error executing GraphQL. Check console.");
+
+      return err;
     }
   }
 
@@ -55,10 +59,10 @@ export default class MondayService {
       const variables = { boardId };
 
       let response = {};
-      monday.api(query, { variables }).then(res => {
+      await monday.api(query, { variables }).then(res => {
         res.data.boards[0].items
           .filter(x => x.group.title !== ARCHIVE_GROUP)
-          .forEach(x => response[x.name] = Number(x.id));
+          .forEach(x => response[x.name] = { id: parseInt(x.id) });
       });
 
       return response;
