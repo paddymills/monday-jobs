@@ -1,0 +1,13 @@
+.dropZone {
+  border: dashed #C5C7D0 5px;
+  border-radius: 16px;
+  padding: 10em;
+}
+
+.dropZoneHover {
+  border-color: #0085FF;
+}
+
+.dropZoneComplete {
+  border-color: #00CA72;
+}
