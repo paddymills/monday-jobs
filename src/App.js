@@ -1,10 +1,16 @@
 import React from "react";
 import "./App.css";
-import mondaySdk from "monday-sdk-js";
-import FileDropBox from "./components/fileDropper.js";
 
+// components
+import FileDropBox from "./components/fileDropper.js";
+import Terminal from "./components/terminal.js";
+
+// services
 import FileParser from "./services/FileParserService.js";
 import mondayService from "./services/MondayService.js";
+
+// monday.com SDK
+import mondaySdk from "monday-sdk-js";
 const monday = mondaySdk();
 
 
@@ -27,7 +33,7 @@ class App extends React.Component {
       jobs: {},
       dropping: false,
       dropped: false,
-      status: null,
+      status: "null",
     };
 
     this.fileParser = new FileParser();
@@ -63,8 +69,6 @@ class App extends React.Component {
   }
 
   preDrop() {
-    console.log(this);
-
     // fetch item ids
     this.updateStatus('Fetching IDs...');
 
@@ -90,7 +94,6 @@ class App extends React.Component {
     // log updates
     let awaitingPromises = true;
     Promise.allSettled(updatePromises).then(() => {
-      console.log("All done!");
       awaitingPromises = false;
     });
     do {
@@ -100,11 +103,12 @@ class App extends React.Component {
     } while (awaitingPromises);
 
     // clear status
-    this.setState({ status: `Complete...[${fulfilledPromises}/${updatePromises.length}]` });
+    this.updateStatus(`Complete...[${fulfilledPromises}/${updatePromises.length}]`);
   }
 
   updateStatus(statusText) {
     this.setState({ status: statusText });
+    console.log(statusText);
   }
 
   render() {
@@ -112,9 +116,8 @@ class App extends React.Component {
       <FileDropBox
         preDropCallback={() => this.preDrop()}
         callback={(res) => this.dropCallback(res)}
-        fileParserCallback={this.fileParser}>
-      </FileDropBox>
-      <p id="caption">{this.state.status}</p>
+        fileParserCallback={this.fileParser} />
+      <Terminal status={this.state.status} />
     </div>;
   }
 }
