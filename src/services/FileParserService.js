@@ -69,8 +69,6 @@ export default class FileParser {
   }
 
   async parseFile(file) {
-    var result = [];
-
     const text = await file.text();
 
     text

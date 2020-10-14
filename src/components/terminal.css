@@ -1,0 +1,37 @@
+.terminal {
+  border-radius: 8px;
+  margin: 16px;
+  padding: 16px;
+  width: 25em;
+  height: 20em;
+
+  color: #ffffff;
+  font-size: 16px;
+  font-family: 'Consolas', 'monaco', monospace;
+  text-shadow: 0 0 4px #F5F6F8;
+  
+  background-color: #323338;
+
+  overflow: auto;
+
+  /* hide scrollbar*/
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* hide scrollbar for Chrome (and Safari and Opera)*/
+.terminal::-webkit-scrollbar {
+  display: none;
+}
+
+p {
+  margin: 0;
+}
+
+.check {
+  color: #00CA72;
+}
+
+.spin {
+  color: #0085FF;
+}

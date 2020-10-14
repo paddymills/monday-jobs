@@ -30,13 +30,14 @@ class App extends React.Component {
     // Default state
     this.state = {
       boardId: null,
-      jobs: {},
       dropping: false,
       dropped: false,
-      status: "null",
     };
 
+
     this.fileParser = new FileParser();
+    this.termRef = React.createRef();
+    this.term = null;
 
     // bind this so you can use callbacks
     this.preDrop.bind(this);
@@ -66,20 +67,28 @@ class App extends React.Component {
       // update file parser config
       this.fileParser.initConfig(this.state);
     });
+
+    this.term = this.termRef.current;
   }
 
-  preDrop() {
-    // fetch item ids
-    this.updateStatus('Fetching IDs...');
+  async preDrop() {
+    // called when file(s) are dropped, but before parsing
 
-    return this.fileParser.initJobs();
+    // fetch item ids
+    const id = this.term.pushStatus('Fetching IDs...');
+    console.log("fetch id: ", id);
+    await this.fileParser.initJobs();
+    this.term.updateItemState(id, "complete")
+
+    return this;
   }
 
   async dropCallback(parsedFileVals) {
     let fulfilledPromises = 0;
+    let statusId = null;
 
     // process updates
-    this.updateStatus(`Parsing file(s)...`);
+    statusId = this.term.pushStatus(`Parsing file(s)...`);
     let updatePromises = [];
     for (const update of parsedFileVals) {
       const { job, vals } = update;
@@ -87,28 +96,30 @@ class App extends React.Component {
       let p = new Promise(resolve => setTimeout(resolve, dur * 1000))
 
       // let p = mondayService.updateJob(this.state.boardId, vals);
-      p.then(() => { fulfilledPromises++; });
+      p.then(() => {
+        fulfilledPromises++;
+      });
       updatePromises.push(p);
     }
+    this.term.updateItemState(statusId, "complete")
 
     // log updates
     let awaitingPromises = true;
     Promise.allSettled(updatePromises).then(() => {
       awaitingPromises = false;
     });
+
+    const progress = () => `${fulfilledPromises}/${updatePromises.length}`;
+
+    statusId = this.term.pushStatus(`Updating item(s)...[${progress()}]`);
     do {
       await sleep(0.1);
 
-      this.updateStatus(`Updating item(s)...[${fulfilledPromises}/${updatePromises.length}]`);
+      this.term.updateItemValue(statusId, `Updating item(s)...[${progress()}]`);
     } while (awaitingPromises);
 
-    // clear status
-    this.updateStatus(`Complete...[${fulfilledPromises}/${updatePromises.length}]`);
-  }
-
-  updateStatus(statusText) {
-    this.setState({ status: statusText });
-    console.log(statusText);
+    // complete updates
+    this.term.updateItemState(statusId, "complete");
   }
 
   render() {
@@ -117,7 +128,7 @@ class App extends React.Component {
         preDropCallback={() => this.preDrop()}
         callback={(res) => this.dropCallback(res)}
         fileParserCallback={this.fileParser} />
-      <Terminal status={this.state.status} />
+      <Terminal ref={this.termRef} />
     </div>;
   }
 }
