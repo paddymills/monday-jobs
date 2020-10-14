@@ -76,7 +76,6 @@ class App extends React.Component {
 
     // fetch item ids
     const id = this.term.pushStatus('Fetching IDs...');
-    console.log("fetch id: ", id);
     await this.fileParser.initJobs();
     this.term.updateItemState(id, "complete")
 
@@ -85,33 +84,37 @@ class App extends React.Component {
 
   async dropCallback(parsedFileVals) {
     let fulfilledPromises = 0;
+    let updatePromises = [];
     let statusId = null;
 
     // process updates
-    statusId = this.term.pushStatus(`Parsing file(s)...`);
-    let updatePromises = [];
+    const progress = () => `${fulfilledPromises}/${updatePromises.length}`;
+    statusId = this.term.pushStatus(`Updating item(s)...[${progress()}]`);
     for (const update of parsedFileVals) {
       const { job, vals } = update;
       const dur = Math.floor(Math.random() * 8) + 2
       let p = new Promise(resolve => setTimeout(resolve, dur * 1000))
 
       // let p = mondayService.updateJob(this.state.boardId, vals);
+      this.term.pushItem({
+        id: vals.id,
+        level: 2,
+        state: "pending",
+        value: job,
+      });
       p.then(() => {
         fulfilledPromises++;
+        this.term.updateItemState(vals.id, "complete");
       });
       updatePromises.push(p);
     }
     this.term.updateItemState(statusId, "complete")
 
-    // log updates
     let awaitingPromises = true;
     Promise.allSettled(updatePromises).then(() => {
       awaitingPromises = false;
     });
 
-    const progress = () => `${fulfilledPromises}/${updatePromises.length}`;
-
-    statusId = this.term.pushStatus(`Updating item(s)...[${progress()}]`);
     do {
       await sleep(0.1);
 

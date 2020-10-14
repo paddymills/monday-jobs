@@ -2,13 +2,13 @@
   border-radius: 8px;
   margin: 16px;
   padding: 16px;
-  width: 25em;
-  height: 20em;
+  width: 30em;
+  height: 25em;
 
   color: #ffffff;
   font-size: 16px;
   font-family: 'Consolas', 'monaco', monospace;
-  text-shadow: 0 0 4px #F5F6F8;
+  text-shadow: 0 0 2px #F5F6F8;
   
   background-color: #323338;
 

@@ -43,6 +43,8 @@ export default class FileDropBox extends React.Component {
         .parseFile(file)
         .then(res => this.callback(res));
     }
+
+    return;
   }
 
   getClassName() {

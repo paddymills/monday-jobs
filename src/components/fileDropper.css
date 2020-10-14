@@ -1,7 +1,7 @@
 .dropZone {
   border: dashed #C5C7D0 5px;
   border-radius: 16px;
-  padding: 10em;
+  padding: 3em 15em;
 }
 
 .dropZoneHover {

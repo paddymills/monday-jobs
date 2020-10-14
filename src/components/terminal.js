@@ -38,8 +38,6 @@ export default class Terminal extends React.Component {
       value: statusText,
     };
 
-    console.log(newItem);
-
     this.pushItem(newItem);
 
     return newItem.id;
