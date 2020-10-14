@@ -31,6 +31,10 @@ class App extends React.Component {
     };
 
     this.fileParser = new FileParser();
+
+    // bind this so you can use callbacks
+    this.preDrop.bind(this);
+    this.dropCallback.bind(this);
   }
 
   componentDidMount() {
@@ -59,6 +63,8 @@ class App extends React.Component {
   }
 
   preDrop() {
+    console.log(this);
+
     // fetch item ids
     this.updateStatus('Fetching IDs...');
 
@@ -104,9 +110,9 @@ class App extends React.Component {
   render() {
     return <div className="App">
       <FileDropBox
-        preDropCallback={this.preDrop}
-        callback={this.dropCallback}
-        fileParserCallback={this.fileParser.parseFile}>
+        preDropCallback={() => this.preDrop()}
+        callback={(res) => this.dropCallback(res)}
+        fileParserCallback={this.fileParser}>
       </FileDropBox>
       <p id="caption">{this.state.status}</p>
     </div>;

@@ -6,7 +6,10 @@ export default class FileDropBox extends React.Component {
     super(props);
 
     // Default state
-    this.state = {};
+    this.state = {
+      dropping: false,
+      dropped: false
+    };
 
     this.callback = props.callback;
     this.preDropCallback = props.preDropCallback;
@@ -26,21 +29,23 @@ export default class FileDropBox extends React.Component {
 
   async dropHandler(event) {
     this.setState({ dropping: false, dropped: true });
+
     event.preventDefault();
+    const files = event.dataTransfer.files;
 
     if (this.preDropCallback) {
       await this.preDropCallback();
     }
 
-    for (const file of event.dataTransfer.files) {
-      const res = await this.fileParser(file);
-
+    for (const file of files) {
       // handle drop event
-      this.callback(res);
+      this.fileParser
+        .parseFile(file)
+        .then(res => this.callback(res));
     }
   }
 
-  render() {
+  getClassName() {
     let className = 'dropZone';
 
     if (this.state.dropping) {
@@ -49,7 +54,11 @@ export default class FileDropBox extends React.Component {
       className += ' dropZoneComplete';
     }
 
-    return <div className={className}
+    return className
+  }
+
+  render() {
+    return <div className={this.getClassName()}
       onDrop={(e) => this.dropHandler(e)}
       onDragOver={(e) => this.dragHandler(e)}
       onDragExit={(e) => this.dragHandler(e)}>
