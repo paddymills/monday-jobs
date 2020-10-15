@@ -23,6 +23,12 @@ function sleep(seconds) {
   return new Promise(resolve => setTimeout(resolve, seconds * 1000));
 }
 
+function testPromise() {
+  const dur = Math.floor(Math.random() * 8) + 2
+
+  return new Promise(resolve => setTimeout(resolve, dur * 1000))
+}
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -92,19 +98,20 @@ class App extends React.Component {
     statusId = this.term.pushStatus(`Updating item(s)...[${progress()}]`);
     for (const update of parsedFileVals) {
       const { job, vals } = update;
-      const dur = Math.floor(Math.random() * 8) + 2
-      let p = new Promise(resolve => setTimeout(resolve, dur * 1000))
+      // let p = testPromise();
 
-      // let p = mondayService.updateJob(this.state.boardId, vals);
+      let p = mondayService
+        .updateJob(this.state.boardId, vals)
+        .then(() => {
+          fulfilledPromises++;
+          this.term.updateItemState(vals.id, "complete");
+        });
+
       this.term.pushItem({
         id: vals.id,
         level: 2,
         state: "pending",
         value: job,
-      });
-      p.then(() => {
-        fulfilledPromises++;
-        this.term.updateItemState(vals.id, "complete");
       });
       updatePromises.push(p);
     }

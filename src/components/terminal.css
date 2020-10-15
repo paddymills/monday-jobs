@@ -11,7 +11,10 @@
   text-shadow: 0 0 2px #F5F6F8;
   
   background-color: #323338;
+}
 
+.terminal,
+.terminal.sublist {
   overflow: auto;
 
   /* hide scrollbar*/
@@ -20,7 +23,8 @@
 }
 
 /* hide scrollbar for Chrome (and Safari and Opera)*/
-.terminal::-webkit-scrollbar {
+.terminal::-webkit-scrollbar,
+.terminal.sublist::-webkit-scrollbar {
   display: none;
 }
 

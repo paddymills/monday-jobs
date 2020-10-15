@@ -9,7 +9,7 @@ const icons = {
 }
 
 function ListItem(props) {
-  return <p>{icons[props.state]}{props.value}</p>
+  return <p id={props.id}>{icons[props.state]}{props.value}</p>
 }
 
 export default class Terminal extends React.Component {
@@ -73,7 +73,7 @@ export default class Terminal extends React.Component {
     const tty = this.state.order.map((id) => {
       const line = Object.assign({}, this.state.items[id]);
 
-      return <ListItem key={id} state={line.state} value={this.lineText(line)} />;
+      return <ListItem id={id} key={id} state={line.state} value={this.lineText(line)} />;
     });
 
     return (
