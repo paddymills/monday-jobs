@@ -1,5 +1,7 @@
 ## Overview
 Monday.com app for updating jobs board by way of csv file upload
+
+this was cloned from Monday's [welcome-apps](https://github.com/mondaycom/welcome-apps/tree/master/apps/quickstart-react)
 ## Run the project
 
 In the project directory, you should run:
