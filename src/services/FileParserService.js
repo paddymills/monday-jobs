@@ -1,8 +1,8 @@
 
 import mondayService from "./MondayService.js";
 
-const PROD_JOB = /(\w)-(\d{7})\w-(\d{2})/;
-const EST_JOB = /E-(\d{2})-(\d{4})\w-(\d{2})/;
+const PROD_JOB = /(\w)-(\d{7}\w)-(\d{2})/;
+const EST_JOB = /E-(\d{2})-(\d{4}\w)-(\d{2})/;
 
 const JOB_INDEX = 1;
 
