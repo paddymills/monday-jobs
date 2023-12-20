@@ -1,6 +1,10 @@
 
 import mondayService from "./MondayService.js";
 
+// TODO: add `Public Prefab Date` as a fallback for Main start if it does not exist
+
+// TODO: add structure letter to parse
+// TODO: can now hard code `D-` for jobs
 const PROD_JOB = /(\w)-(\d{7})\w-(\d{2})/;
 const EST_JOB = /E-(\d{2})-(\d{4})\w-(\d{2})/;
 
