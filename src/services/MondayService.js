@@ -1,5 +1,6 @@
 import mondaySdk from "monday-sdk-js";
 const monday = mondaySdk();
+monday.setApiVersion('2023-10');
 
 const ARCHIVE_GROUP = "Jobs Completed Through PC";
 
