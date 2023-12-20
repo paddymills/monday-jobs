@@ -1,14 +1,19 @@
 import React from "react";
 import "./fileDropper.css";
 
+const DropState = {
+  None: '',
+  Dropping:  'dropZoneHover',
+  Dropped: 'dropZoneComplete'
+};
+
 export default class FileDropBox extends React.Component {
   constructor(props) {
     super(props);
 
     // Default state
     this.state = {
-      dropping: false,
-      dropped: false
+      drop: DropState.None
     };
 
     this.callback = props.callback;
@@ -20,15 +25,15 @@ export default class FileDropBox extends React.Component {
     event.preventDefault();
 
     if (event.type === "dragover") {
-      this.setState({ dropping: true });
+      this.setState({ drop: DropState.Dropping });
     }
     else if (event.type === "dragexit") {
-      this.setState({ dropping: false });
+      this.setState({ drop: DropState.None });
     }
   }
 
   async dropHandler(event) {
-    this.setState({ dropping: false, dropped: true });
+    this.setState({ drop: DropState.Dropped });
 
     event.preventDefault();
     const files = event.dataTransfer.files;
@@ -47,20 +52,8 @@ export default class FileDropBox extends React.Component {
     return;
   }
 
-  getClassName() {
-    let className = 'dropZone';
-
-    if (this.state.dropping) {
-      className += ' dropZoneHover';
-    } else if (this.state.dropped) {
-      className += ' dropZoneComplete';
-    }
-
-    return className
-  }
-
   render() {
-    return <div className={this.getClassName()}
+    return <div className={'dropZone ' + this.state.drop}
       onDrop={(e) => this.dropHandler(e)}
       onDragOver={(e) => this.dragHandler(e)}
       onDragExit={(e) => this.dragHandler(e)}>
