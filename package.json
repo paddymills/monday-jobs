@@ -30,9 +30,9 @@
 	"dependencies": {
 		"@fortawesome/fontawesome-svg-core": "^1.2.36",
 		"@fortawesome/free-solid-svg-icons": "^5.15.4",
-		"@fortawesome/react-fontawesome": "^0.1.19",
 		"@mondaycom/apps-sdk": "^2.1.2",
-		"monday-sdk-js": "^0.5.2"
+		"monday-sdk-js": "^0.5.2",
+		"svelte-fa": "^3.0.4"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^3.0.1",
@@ -44,6 +44,7 @@
 		"eslint": "^8.56.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.35.1",
+		"monday-ui-style": "^0.1.206",
 		"prettier": "^3.1.1",
 		"prettier-plugin-svelte": "^3.1.2",
 		"publint": "^0.1.16",

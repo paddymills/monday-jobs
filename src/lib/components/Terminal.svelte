@@ -1,4 +1,19 @@
-<div class="terminal"></div>
+<script lang="ts">
+	import type { TerminalItem } from '$lib/Terminal.ts';
+	import TerminalLine from '$lib/components/TerminalLine.svelte';
+
+	let items: Array<TerminalItem> = new Array();
+
+	export function addTerminalItem(item: TerminalItem) {
+		items.push(item);
+	}
+</script>
+
+<div class="terminal">
+	{#each Object.entries(items) as [id, item]}
+		<TerminalLine {item} />
+	{/each}
+</div>
 
 <style lang="scss">
 	.terminal {
@@ -16,8 +31,7 @@
 		background-color: #323338;
 	}
 
-	.terminal,
-	.terminal.sublist {
+	.terminal {
 		overflow: auto;
 
 		/* hide scrollbar*/
@@ -26,20 +40,7 @@
 	}
 
 	/* hide scrollbar for Chrome (and Safari and Opera)*/
-	.terminal::-webkit-scrollbar,
-	.terminal.sublist::-webkit-scrollbar {
+	.terminal::-webkit-scrollbar {
 		display: none;
-	}
-
-	p {
-		margin: 0;
-	}
-
-	.check {
-		color: #00ca72;
-	}
-
-	.spin {
-		color: #0085ff;
 	}
 </style>

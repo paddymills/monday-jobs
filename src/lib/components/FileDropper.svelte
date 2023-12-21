@@ -8,11 +8,9 @@
 	}
 
 	let state = DropState.None;
-	let fileParser = new FileParser();
 
 	export let preDrop = () => {};
-	export let dropCallback = (res: string) => {};
-	export let fileParserCallback = (res: string) => {};
+	export let fileDropCallback = (file: File) => {};
 
 	function handleDrag(event: Event) {
 		event.preventDefault();
@@ -40,10 +38,8 @@
 
 			for (const file of event.dataTransfer.files) {
 				// handle drop event
-				fileParser.parseFile(file).then((res) => fileParserCallback(res));
+				fileDropCallback(file);
 			}
-
-			dropCallback("File parsed");
 		}
 	}
 </script>
