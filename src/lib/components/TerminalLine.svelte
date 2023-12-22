@@ -31,12 +31,19 @@
 
     p {
 		margin: 0;
-		color: #00ca72;
+		// color: #00ca72;
+        color: var(--warning-color)
 	}
 
     .pending {
-        color: #0085ff;
+        // color: #0085ff;
+        color: var(--primary-color)
     }
+
+    .warn {
+        color: var(--warning-color)
+    }
+
     .error {
         // color: #d83a52
         color: var(--negative-color);

@@ -6,8 +6,15 @@ enum ItemState {
     Default,
     Pending,
     Complete,
+    Warn,
     Error,
 };
+
+enum SortOrder {
+    Unsorted,
+    CompleteAtTop,
+    CompleteAtBottom,
+}
 
 // type SubItems = Record<number, TerminalItem>;
 type IconParams = { class: string, icon: IconDefinition, spin: boolean };
@@ -26,6 +33,8 @@ abstract class TerminalItem {
                 return { class: "pending", icon: faCircleNotch, spin: true};
             case ItemState.Complete:
                 return { class: "complete", icon: faCheck, spin: false};
+            case ItemState.Warn:
+                return { class: "warn", icon: faExclamationTriangle, spin: false};
             case ItemState.Error:
                 return { class: "error", icon: faExclamationTriangle, spin: false};
         }
@@ -74,18 +83,37 @@ class AsyncTerminalMessage<T> extends TerminalMessage {
 class AsyncTerminalMessageGroup<T> extends TerminalMessage {
     state: ItemState;
     subMessages: Array<AsyncTerminalMessage<T>>;
-    newAtTop: boolean;
+    sort: SortOrder;
 
-    constructor(text: string, newAtTop?: boolean) {
+    constructor(text: string, sort?: SortOrder) {
         super(text);
 
         this.state = ItemState.Pending;
         this.subMessages = new Array();
-        this.newAtTop = newAtTop || false;
+        this.sort = sort || SortOrder.Unsorted;
     }
 
     addMessage(message: AsyncTerminalMessage<T>) {
         this.subMessages.push(message);
+    }
+
+    getState(): ItemState {
+        return this.state;
+    }
+
+    hasSubItems(): boolean {
+        return this.subMessages.length > 0;
+    }
+
+    subItems(): Array<AsyncTerminalMessage<T>> {
+        if ( this.sort == SortOrder.Unsorted ) {
+            return this.subMessages;
+        }
+
+        let items = new Array();
+        // TODO: completed at top/bottom sort
+
+        return items;
     }
 
     async finalize(): Promise<void> {
