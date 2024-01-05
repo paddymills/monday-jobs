@@ -1,35 +1,32 @@
-## Overview
-Monday.com app for updating jobs board by way of csv file upload
-## Run the project
+# Monday.com Jobs update
 
-In the project directory, you should run:
+## Building
+```
+npm install
+npm run build
+```
 
-### `npm install`
+## Development
 
-And then to run an application with automatic virtual ngrok tunnel, run:
+There are 2 ways of testing. This can be run local to just test the UI or it can be run within Monday's apps structure.
 
-### `npm start`
+In both cases, you need to first run
+```
+npm run dev
+```
 
-Visit http://localhost:4040/status and under "command_line section" find the URL. This is the public URL of your app, so you can use it to test it.
-F.e.: https://021eb6330099.ngrok.io
+### Apps structure
+Requires the [monday-apps-cli](https://developer.monday.com/apps/docs/monday-code-cli) to be set up to create tunnel to the app framework.
 
-## Configure Monday App 
+In a different terminal window, run
+```
+mapps tunnel:create --port 5173 --appId {monday app id}
+```
 
-1. Open monday.com, login to your account and go to a "Developers" section.
-2. Create a new "QuickStart View Example App"
-3. Open "OAuth & Permissions" section and add "boards:read" scope
-4. Open "Features" section and create a new "Boards View" feature
-5. Open "View setup" tab and fulfill in "Custom URL" field your ngrok public URL, which you got previously (f.e. https://021eb6330099.ngrok.io)
-6. Click "Boards" button and choose one of the boards with some data in it.
-7. Click "Preview button"
-8. Enjoy the Quickstart View Example app!
+## Deploy
+Requires the [monday-apps-cli](https://developer.monday.com/apps/docs/monday-code-cli) to be set up to push the code
 
-## Release
-TODO: pwsh script to do this
-1. Run `npm run build`
-2. Zip your "./build" folder
-3. Open "Build" tab in your Feature
-4. Click "New Build" button
-5. Click "Upload" radio button and upload zip file with your build
-6. Go to any board and add your just released view
-7. Enjoy!
+```
+npm run build
+mapps code:push -d dist -i {app version id}
+```
