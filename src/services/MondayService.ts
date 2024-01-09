@@ -148,11 +148,11 @@ class MondayService extends ApiService {
 	getUpdateParams(job: Job): DynObject {
 		let params: DynObject = {};
 
-		params[this.columns.earlyStart] = formatDate(job.earlyStart);
-		params[this.columns.mainStart] = formatDate(job.mainStart);
-		params[this.columns.pm] = job.pm;
-		params[this.columns.products] = job.getProducts();
-		params[this.columns.bays] = job.getBays();
+		if ( job.earlyStart !== null ) { params[this.columns.earlyStart] = formatDate(job.earlyStart); }
+		if ( job.mainStart !== null ) { params[this.columns.mainStart] = formatDate(job.mainStart); }
+		if ( job.pm != null ) { params[this.columns.pm] = job.pm; }
+		if ( job.products.length > 0 ) { params[this.columns.products] = job.getProducts(); }
+		if ( job.bays.length > 0 ) { params[this.columns.bays] = job.getBays(); }
 
 		return params;
 	}
@@ -162,12 +162,15 @@ class MondayService extends ApiService {
 
 		if ( !Object.hasOwn(this.mondayIds, job.name) ) return;
 
+		const params = this.getUpdateParams(job);
+		console.log(`Updating ${job.name}`, params);
+
 		const mondayId = this.mondayIds[job.name];
 		try {
 			const variables = {
 				boardId: this.boardId,
 				itemId: mondayId,
-				columnValues: JSON.stringify(this.getUpdateParams(job))
+				columnValues: JSON.stringify(params)
 			};
 			return monday.api(updateJobMutation, { variables });
 		} catch (err) {

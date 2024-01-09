@@ -8,8 +8,8 @@ const COST_CENTERS: Record<number, string> = {
 };
 
 type JsonFormat = {
-    earlyStart: Date,
-    mainStart: Date,
+    earlyStart: string,
+    mainStart: string,
     pm: string,
     products: string[],
     bays: number[]
@@ -20,15 +20,17 @@ class Job {
 	pm: string = "";
 	products: string[] = [];
 	bays: number[] = [];
-	earlyStart: Date = new Date();
-	mainStart: Date = new Date();
+	earlyStart: Date | null = new Date();
+	mainStart:  Date | null = new Date();
 
     constructor(job: string, json: JsonFormat) {
         this.name = job;
         Object.assign(this, json);
 
-        this.earlyStart = new Date(json.earlyStart);
-        this.mainStart = new Date(json.mainStart);
+        const handleDate = (dt: string) => dt === null ? null : new Date(dt);
+
+        this.earlyStart = handleDate(json.earlyStart);
+        this.mainStart  = handleDate(json.mainStart);
     }
 
     getProducts(): string {
